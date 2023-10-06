@@ -24,7 +24,7 @@ export default function AddNotificationModal() {
 
 	return (
 		<>
-			{user.id == 190423552 && <Button icon={<PlusOutlined />} onClick={handleClick} size='small' />}
+			{user?.id == 190423552 && <Button icon={<PlusOutlined />} onClick={handleClick} size='small' />}
 			<Modal open={open} title='Добавление уведомления' cancelText='Отмена' okText='Добавить' onOk={onOk} onCancel={onCancel}>
 				<Form form={form}>
 					<Form.Item label='Тикер' name='ticker' rules={[{required: true, message: "Введите тикер"}]}>
