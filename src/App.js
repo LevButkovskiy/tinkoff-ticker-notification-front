@@ -1,8 +1,9 @@
 import SPARender from "./core/components/SPARender"
+import "./styles.css"
 
 function App() {
 	return (
-		<div className='App'>
+		<div className='app'>
 			<SPARender />
 		</div>
 	)

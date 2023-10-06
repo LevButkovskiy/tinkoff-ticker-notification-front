@@ -1,0 +1,18 @@
+.tabbar {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+
+	display: flex;
+
+	background: white;
+
+	width: 100%;
+
+	border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.tab {
+	text-align: center;
+	padding: 6px;
+}
