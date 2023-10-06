@@ -1,9 +1,8 @@
-import {useEffect, useState} from "react"
+import {useEffect} from "react"
 
 const tg = window?.Telegram?.WebApp
-export default function useTelegram() {
-	const [user, setUser] = useState(window?.Telegram?.WebApp?.initDataUnsafe?.user)
 
+export default function useTelegram() {
 	useEffect(() => {
 		if (!tg) return
 		tg.ready()
@@ -11,5 +10,5 @@ export default function useTelegram() {
 		tg.setHeaderColor(tg.themeParams.secondary_bg_color)
 	}, [])
 
-	return [user]
+	return [window?.Telegram?.WebApp?.initDataUnsafe?.user]
 }
