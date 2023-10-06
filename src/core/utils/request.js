@@ -1,4 +1,4 @@
-const BASE_URL = process.env.NODE_ENV === "development" ? "http://localhost:3005" : process.env.REACT_APP_API_URL
+const BASE_URL = process.env.REACT_APP_NODE_ENV === "development" ? "http://localhost:3005" : process.env.REACT_APP_API_URL
 
 export default async function apiRequest(path, query = {}, options = {}) {
 	try {

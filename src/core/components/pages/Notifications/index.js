@@ -9,7 +9,8 @@ function Notifications() {
 	const [notifications, setNotifications] = useState([])
 
 	const requestNotifications = useCallback(() => {
-		apiRequest("/notifications", {chatId: user?.id})
+		if (!user?.id) return
+		apiRequest("/notifications", {chatId: user.id})
 			.then((res) => setNotifications(res?.list))
 			.catch((e) => console.error(e))
 	}, [user?.id])
