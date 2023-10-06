@@ -12,7 +12,7 @@ function Notifications() {
 		apiRequest("/notifications", {chatId: user?.id})
 			.then((res) => setNotifications(res?.list))
 			.catch((e) => console.error(e))
-	}, [user])
+	}, [user?.id])
 
 	const handleDelete = (id) => (event) => {
 		apiRequest("/notifications", {chatId: user?.id, notificationId: id}, {method: "DELETE"})

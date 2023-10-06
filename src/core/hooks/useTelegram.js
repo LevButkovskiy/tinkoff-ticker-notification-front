@@ -10,5 +10,5 @@ export default function useTelegram() {
 		tg.setHeaderColor(tg.themeParams.secondary_bg_color)
 	}, [])
 
-	return [window?.Telegram?.WebApp?.initDataUnsafe?.user]
+	return [process.env.NODE_ENV === "development" ? {id: 190423552} : window?.Telegram?.WebApp?.initDataUnsafe?.user]
 }
