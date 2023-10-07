@@ -1,6 +1,7 @@
+import {Button, Form, InputNumber, Modal, Select, message} from "antd"
+import {useEffect, useState} from "react"
+
 import {PlusOutlined} from "@ant-design/icons"
-import {Button, Form, Input, Modal, message} from "antd"
-import {useState} from "react"
 import useTelegram from "../../hooks/useTelegram"
 import apiRequest from "../../utils/request"
 
@@ -11,6 +12,17 @@ export default function AddNotificationModal({update}) {
 
 	const [open, setOpen] = useState(false)
 	const [loading, setLoading] = useState(false)
+
+	const [instruments, setInstruments] = useState([])
+
+	useEffect(() => {
+		if (!open) return
+		const requestInstruments = async () => {
+			const res = await apiRequest("/instruments/tickers")
+			setInstruments(res?.list)
+		}
+		requestInstruments()
+	}, [open])
 
 	const addNotificationRequest = async (values) => {
 		setLoading(true)
@@ -44,16 +56,18 @@ export default function AddNotificationModal({update}) {
 	const onCancel = () => setOpen(false)
 	const handleClick = () => setOpen(true)
 
+	const ticker_options = instruments.map((t) => ({label: t.ticker, value: t.ticker}))
+
 	return (
 		<>
 			<Button icon={<PlusOutlined />} onClick={handleClick} size='small' />
 			<Modal loading={loading} open={open} title='Добавление уведомления' cancelText='Отмена' okText='Добавить' onOk={onOk} onCancel={onCancel}>
 				<Form form={form}>
-					<Form.Item label='Тикер' name='ticker' rules={[{required: true, message: "Введите тикер"}]}>
-						<Input placeholder='Введите тикер' />
+					<Form.Item label='Тикер' name='ticker' rules={[{required: true, message: "Выберите тикер"}]}>
+						<Select options={ticker_options} placeholder='Выберите тикер' showSearch />
 					</Form.Item>
 					<Form.Item label='Цена' name='value' rules={[{required: true, message: "Введите цену"}]}>
-						<Input type='number' placeholder='Введите цену' />
+						<InputNumber placeholder='Введите цену' style={{width: "100%"}} type='number' pattern='\d*' min={0} />
 					</Form.Item>
 				</Form>
 			</Modal>
