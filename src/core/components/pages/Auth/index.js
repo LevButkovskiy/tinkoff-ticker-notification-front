@@ -19,7 +19,7 @@ export default function Auth() {
 		return () => {
 			clearTimeout(t)
 		}
-	}, [timer, showCodeForm])
+	}, [form, timer, showCodeForm])
 
 	return (
 		<>

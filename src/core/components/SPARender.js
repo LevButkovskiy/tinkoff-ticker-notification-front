@@ -1,6 +1,7 @@
 import {useState} from "react"
 import {PAGES} from "../constants/pages"
 import Layout from "./UI/Layout"
+import TabBar from "./UI/TabBar"
 
 export default function SPARender() {
 	const [currentPage, setCurrentPage] = useState("notifications")
@@ -9,7 +10,7 @@ export default function SPARender() {
 	return (
 		<>
 			<Layout>{page ? <page.Component /> : "Page not found"}</Layout>
-			{/* <TabBar currentPage={currentPage} setCurrentPage={setCurrentPage} /> */}
+			{false && <TabBar currentPage={currentPage} setCurrentPage={setCurrentPage} />}
 		</>
 	)
 }

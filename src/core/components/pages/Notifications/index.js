@@ -4,7 +4,7 @@ import dayjs from "dayjs"
 import {memo, useCallback, useEffect, useState} from "react"
 import useTelegram from "../../../hooks/useTelegram"
 import apiRequest from "../../../utils/request"
-import AddNotificationModal from "../../UI/business/AddNotificationModal"
+import AddNotificationModal from "../../business/AddNotificationModal"
 
 function Notifications() {
 	const [user] = useTelegram()
@@ -30,7 +30,7 @@ function Notifications() {
 		<>
 			<Divider orientation='left'>
 				<Space>
-					Уведомления <AddNotificationModal />
+					Уведомления <AddNotificationModal update={requestNotifications} />
 				</Space>
 			</Divider>
 			<List
