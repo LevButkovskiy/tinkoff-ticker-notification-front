@@ -3,5 +3,5 @@
 	color: var(--tg-theme-text-color);
 	max-width: calc(100vw - 24px);
 	width: calc(100vw - 24px);
-	overflow: hidden;
+	overflow: scroll;
 }
