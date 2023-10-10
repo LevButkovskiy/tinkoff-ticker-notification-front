@@ -1,4 +1,4 @@
-import {Button, Form, InputNumber, Modal, Select, message} from "antd"
+import {Button, Form, Input, Modal, Select, message} from "antd"
 import {useEffect, useState} from "react"
 
 import {PlusOutlined} from "@ant-design/icons"
@@ -66,8 +66,21 @@ export default function AddNotificationModal({update}) {
 					<Form.Item label='Тикер' name='ticker' rules={[{required: true, message: "Выберите тикер"}]}>
 						<Select options={ticker_options} placeholder='Выберите тикер' showSearch />
 					</Form.Item>
-					<Form.Item label='Цена' name='value' rules={[{required: true, message: "Введите цену"}]}>
-						<InputNumber placeholder='Введите цену' style={{width: "100%"}} type='number' pattern='\d*' min={0} />
+					<Form.Item
+						label='Цена'
+						name='value'
+						rules={[
+							{required: true, message: "Введите цену"},
+							() => ({
+								validator(_, value) {
+									value = value?.replace(",", ".")
+									if (isNaN(value)) return Promise.reject("Нужно ввести число")
+									return Promise.resolve()
+								},
+							}),
+						]}
+					>
+						<Input placeholder='Введите цену' style={{width: "100%"}} inputMode='decimal' min={0} />
 					</Form.Item>
 				</Form>
 			</Modal>
