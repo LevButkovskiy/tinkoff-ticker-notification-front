@@ -6,6 +6,8 @@ import useTelegram from "../../hooks/useTelegram"
 import apiRequest from "../../utils/request"
 
 export default function AddNotificationModal({update}) {
+	const [messageApi, contextHolder] = message.useMessage()
+
 	const [form] = Form.useForm()
 
 	const [user] = useTelegram()
@@ -25,6 +27,8 @@ export default function AddNotificationModal({update}) {
 	}, [open])
 
 	const addNotificationRequest = async (values) => {
+		values.value = values.value.replace(",", ".")
+		if (isNaN(values.value)) return messageApi.error("Введено не число")
 		setLoading(true)
 		try {
 			await apiRequest(
@@ -32,15 +36,15 @@ export default function AddNotificationModal({update}) {
 				{chatId: user.id},
 				{
 					method: "POST",
-					body: values,
+					body: {...values, value: +values.value},
 				},
 			)
-			message.success("Уведомление добавлено")
+			messageApi.open({type: "success", content: "Уведомление добавлено", duration: 0.5})
 			setOpen(false)
 			update()
 			form.resetFields()
 		} catch (e) {
-			message.error(e.message)
+			messageApi.error(e.message)
 		} finally {
 			setLoading(false)
 		}
@@ -60,6 +64,7 @@ export default function AddNotificationModal({update}) {
 
 	return (
 		<>
+			{contextHolder}
 			<Button icon={<PlusOutlined />} onClick={handleClick} size='small' />
 			<Modal loading={loading} open={open} title='Добавление уведомления' cancelText='Отмена' okText='Добавить' onOk={onOk} onCancel={onCancel}>
 				<Form form={form}>
@@ -69,11 +74,12 @@ export default function AddNotificationModal({update}) {
 					<Form.Item
 						label='Цена'
 						name='value'
+						validateFirst
 						rules={[
 							{required: true, message: "Введите цену"},
 							() => ({
 								validator(_, value) {
-									value = value?.replace(",", ".")
+									value = +value?.replace(",", ".")
 									if (isNaN(value)) return Promise.reject("Нужно ввести число")
 									return Promise.resolve()
 								},

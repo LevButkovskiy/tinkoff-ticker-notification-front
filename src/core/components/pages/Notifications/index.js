@@ -1,10 +1,9 @@
-import {CheckCircleOutlined, DeleteOutlined, PlusCircleOutlined} from "@ant-design/icons"
-import {Avatar, Button, Divider, List, Space} from "antd"
-import dayjs from "dayjs"
-import {memo, useCallback, useEffect, useState} from "react"
+import {Collapse, Divider, List, Space} from "antd"
+import {memo, useCallback, useEffect, useMemo, useState} from "react"
 import useTelegram from "../../../hooks/useTelegram"
 import apiRequest from "../../../utils/request"
 import AddNotificationModal from "../../business/AddNotificationModal"
+import NotificationListItem from "../../business/NotificationListItem"
 
 function Notifications() {
 	const [user] = useTelegram()
@@ -18,13 +17,33 @@ function Notifications() {
 			.catch((e) => console.error(e))
 	}, [user?.id])
 
-	const handleDelete = (id) => (event) => {
-		apiRequest("/notifications", {chatId: user?.id, notificationId: id}, {method: "DELETE"})
-			.then(requestNotifications)
-			.catch((e) => console.error(e))
-	}
-
 	useEffect(() => requestNotifications(), [requestNotifications])
+
+	const collapseItems = useMemo(
+		() => [
+			{
+				key: "active",
+				label: "Активные",
+				children: (
+					<List
+						dataSource={notifications.filter((e) => !e.fulfilled)}
+						renderItem={(item) => <NotificationListItem item={item} update={requestNotifications} />}
+					/>
+				),
+			},
+			{
+				key: "archive",
+				label: "Завершенные",
+				children: (
+					<List
+						dataSource={notifications.filter((e) => e.fulfilled)}
+						renderItem={(item) => <NotificationListItem item={item} update={requestNotifications} />}
+					/>
+				),
+			},
+		],
+		[notifications, requestNotifications],
+	)
 
 	return (
 		<>
@@ -33,34 +52,7 @@ function Notifications() {
 					Уведомления <AddNotificationModal update={requestNotifications} />
 				</Space>
 			</Divider>
-			<List
-				dataSource={notifications}
-				renderItem={(item) => (
-					<List.Item
-						actions={!item.fulfilled ? [<Button size='small' danger onClick={handleDelete(item._id)} icon={<DeleteOutlined />} />] : ["Выполнено"]}
-					>
-						<List.Item.Meta
-							avatar={
-								item.logoUrl || item.ticker === "SBER" ? (
-									<Avatar
-										size='small'
-										src='https://static-sl.insales.ru/r/ignKT1j0mSQ/rs:fit:1920:1920:1/plain/files/1/1135/15860847/original/android-chrome-192x192.png@jpg'
-									/>
-								) : (
-									<Avatar size='small'>{item.ticker[0]}</Avatar>
-								)
-							}
-							title={`${item.ticker} - ${item.value}`}
-							description={
-								<>
-									{item.fulfilled ? <CheckCircleOutlined /> : <PlusCircleOutlined />}{" "}
-									{dayjs(item.fulfilled || item.createdAt).format("DD.MM.YYYY HH:mm")}
-								</>
-							}
-						/>
-					</List.Item>
-				)}
-			/>
+			<Collapse ghost expandIconPosition='end' defaultActiveKey={["active"]} items={collapseItems} />
 		</>
 	)
 }
