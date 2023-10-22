@@ -60,16 +60,17 @@ export default function AddNotificationModal({update}) {
 	const onCancel = () => setOpen(false)
 	const handleClick = () => setOpen(true)
 
-	const ticker_options = instruments.map((t) => ({label: t.ticker, value: t.ticker}))
+	const ticker_options = instruments.map((t) => ({label: `${t.countryOfRisk} ${t.ticker}`, value: t.figi}))
 
+	const filterOption = (input, {label, value}) => (label ?? "").toLowerCase().includes(input.toLowerCase())
 	return (
 		<>
 			{contextHolder}
 			<Button icon={<PlusOutlined />} onClick={handleClick} size='small' />
 			<Modal loading={loading} open={open} title='Добавление уведомления' cancelText='Отмена' okText='Добавить' onOk={onOk} onCancel={onCancel}>
 				<Form form={form}>
-					<Form.Item label='Тикер' name='ticker' rules={[{required: true, message: "Выберите тикер"}]}>
-						<Select options={ticker_options} placeholder='Выберите тикер' showSearch />
+					<Form.Item label='Тикер' name='figi' rules={[{required: true, message: "Выберите тикер"}]}>
+						<Select options={ticker_options} placeholder='Выберите тикер' showSearch filterOption={filterOption} />
 					</Form.Item>
 					<Form.Item
 						label='Цена'

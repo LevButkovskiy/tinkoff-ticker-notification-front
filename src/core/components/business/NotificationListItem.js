@@ -17,11 +17,8 @@ export default function NotificationListItem({item, update = () => {}}) {
 		<List.Item actions={!item.fulfilled ? [<Button size='small' danger onClick={handleDelete(item._id)} icon={<DeleteOutlined />} />] : ["Выполнено"]}>
 			<List.Item.Meta
 				avatar={
-					item.logoUrl || item.ticker === "SBER" ? (
-						<Avatar
-							size='small'
-							src='https://static-sl.insales.ru/r/ignKT1j0mSQ/rs:fit:1920:1920:1/plain/files/1/1135/15860847/original/android-chrome-192x192.png@jpg'
-						/>
+					item.figi ? (
+						<Avatar size='small' src={`https://raw.githubusercontent.com/Mixolap/bondana_images/main/stocks/${item.figi}.png`} />
 					) : (
 						<Avatar size='small'>{item.ticker[0]}</Avatar>
 					)
