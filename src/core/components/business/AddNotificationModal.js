@@ -88,6 +88,9 @@ export default function AddNotificationModal({update}) {
 					>
 						<Input placeholder='Введите цену' style={{width: "100%"}} inputMode='decimal' min={0} />
 					</Form.Item>
+					<Form.Item label='Комментарий' name='comment'>
+						<Input placeholder='Комментарий' />
+					</Form.Item>
 				</Form>
 			</Modal>
 		</>
